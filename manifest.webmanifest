@@ -1,0 +1,13 @@
+{
+  "name": "Power — Weekly Routine Planner",
+  "short_name": "Power",
+  "description": "Set your routine once and it repeats week after week.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef2ef",
+  "theme_color": "#1c6a50",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

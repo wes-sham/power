@@ -1,0 +1,12 @@
+{
+  "name": "power",
+  "version": "0.1.0",
+  "description": "Weekly routine planner: set it once, it repeats week after week.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.js",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=18" }
+}

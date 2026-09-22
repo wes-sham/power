@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Power Weekly Planner</title>
+<meta name="description" content="Set your routine once and it repeats week after week.">
+<meta name="theme-color" content="#1c6a50">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<!-- app:start -->
+<div class="app">
+  <header class="titlebar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v16H3zM3 9h18M3 14h18M9 4v16M15 4v16"/></svg>
+      <span class="wordmark">Power</span>
+    </div>
+    <div class="range"><h1 id="rangeLabel">This week</h1><span id="weekLabel" class="mono"></span></div>
+    <span id="saveState" class="save"></span>
+  </header>
+
+  <div class="rtabs" role="tablist" aria-label="Ribbon">
+    <button type="button" class="rtab" role="tab" data-tab="file">File</button>
+    <button type="button" class="rtab" role="tab" data-tab="home">Home</button>
+    <button type="button" class="rtab" role="tab" data-tab="view">View</button>
+    <button type="button" class="rtab" role="tab" data-tab="reminders">Reminders</button>
+  </div>
+  <div class="ribbon" id="ribbon" role="toolbar" aria-label="Commands"></div>
+
+  <div class="formula">
+    <div class="namebox mono" id="nameBox" title="Selected cell (column = day, row = hour)">—</div>
+    <span class="fx-label" aria-hidden="true">fx</span>
+    <input id="fx" autocomplete="off" aria-label="Title of the selected item, or quick-add to the selected cell">
+    <span id="fxHint" class="fx-hint"></span>
+  </div>
+  <div class="samplebar" id="sampleBar" hidden>
+    <span>You’re looking at a sample student routine.</span>
+    <button type="button" data-act="clear-sample">Clear it and start mine</button>
+    <button type="button" data-act="keep-sample">Keep it</button>
+  </div>
+
+  <main class="sheet" id="sheet" tabindex="0" aria-label="Schedule — double-click a cell to add, arrow keys to move"></main>
+
+  <footer class="statusbar">
+    <div class="sheettabs" role="tablist" aria-label="View">
+      <button type="button" class="sheettab" role="tab" data-act="sheet" data-view="day">Day</button>
+      <button type="button" class="sheettab" role="tab" data-act="sheet" data-view="week">Week</button>
+      <button type="button" class="sheettab" role="tab" data-act="sheet" data-view="month">Month</button>
+    </div>
+    <span id="readyText" class="ready">Ready</span>
+    <div id="stats" class="stats" aria-live="polite"></div>
+  </footer>
+</div>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<dialog id="editor" aria-label="Event or task details"></dialog>
+<dialog id="ask"></dialog>
+<!-- app:end -->
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

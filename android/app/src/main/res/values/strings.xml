@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Power</string>
+    <string name="title_activity_main">Power</string>
+    <string name="package_name">com.wessham.power</string>
+    <string name="custom_url_scheme">com.wessham.power</string>
+</resources>

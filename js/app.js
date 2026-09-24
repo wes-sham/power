@@ -9,6 +9,10 @@ import {
   dueReminders, upcomingReminders, pruneNotified, notificationsSupported, requestPermission,
   showSystemNotification,
 } from './reminders.js';
+import {
+  isNative, platform, initNative, syncReminders, nativePermission, askNativePermission, exactAlarmSetting,
+  openExactAlarmSetting, sendTestNotification, shareExport,
+} from './native.js';
 
 /* ---------- state ---------- */
 
@@ -22,6 +26,8 @@ const ui = {
   sel: null, // {kind:'cell', date, min|null} | {kind:'item', id, date}
   undo: [],
   scrollPending: true,
+  perm: 'prompt', // notification permission: granted | denied | prompt | unsupported
+  exact: 'granted', // Android exact-alarm setting
 };
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -38,6 +44,26 @@ function persist() {
   const ok = save(state);
   const el = $('#saveState');
   if (el) el.textContent = ok ? 'Saved on this device' : 'Not saved — browser storage is off';
+  syncReminders(state);
+}
+
+async function refreshPermission() {
+  if (isNative) {
+    ui.perm = await nativePermission();
+    ui.exact = await exactAlarmSetting();
+  } else if (notificationsSupported()) {
+    ui.perm = Notification.permission === 'default' ? 'prompt' : Notification.permission;
+  } else ui.perm = 'unsupported';
+  if (ui.tab === 'reminders') renderRibbon();
+  return ui.perm;
+}
+
+async function askPermission() {
+  if (isNative) await askNativePermission();
+  else await requestPermission();
+  const p = await refreshPermission();
+  syncReminders(state);
+  return p;
 }
 
 function commit(mutate, { undoable = true } = {}) {
@@ -213,22 +239,31 @@ function renderRibbon() {
       `<label class="rcheck" for="${id}"><input type="checkbox" id="${id}" ${on ? 'checked' : ''}><span>${label}</span></label>`;
     html += group('Show', `<div class="stack">${check('opt-weekends', 'Weekends', S().weekends)}${check('opt-clock24', '24-hour clock', S().clock24)}${check('opt-hideDone', 'Hide done items', S().hideDone)}</div>`);
   } else if (ui.tab === 'reminders') {
-    const perm = notificationsSupported() ? Notification.permission : 'unsupported';
-    const permText = {
-      granted: 'System notifications are on.',
-      denied: 'Notifications are blocked for this site — reminders appear inside the app instead. Allow them in your browser’s site settings.',
-      default: 'Reminders appear inside the app. Allow notifications to get them even when this tab is in the background.',
-      unsupported: 'This browser can’t show system notifications here, so reminders appear inside the app.',
-    }[perm];
+    const perm = ui.perm;
+    const permText = isNative
+      ? {
+          granted: 'Reminders are scheduled with your phone, so they arrive even when Power is closed.',
+          denied: `Notifications are turned off for Power. Turn them on in your phone’s Settings › ${platform === 'ios' ? 'Notifications › Power' : 'Apps › Power › Notifications'}.`,
+          prompt: 'Allow notifications so reminders arrive even when Power is closed.',
+        }[perm]
+      : {
+          granted: 'System notifications are on.',
+          denied: 'Notifications are blocked for this site — reminders appear inside the app instead. Allow them in your browser’s site settings.',
+          prompt: 'Reminders appear inside the app. Allow notifications to get them even when this tab is in the background.',
+          unsupported: 'This browser can’t show system notifications here, so reminders appear inside the app.',
+        }[perm];
+    const exactNote = isNative && perm === 'granted' && ui.exact !== 'granted'
+      ? ' Android may delay them by a few minutes — turn on exact timing to get them right on time.' : '';
     html += group('Reminders', `${rbtn('toggle-reminders', 'bell', S().reminders ? 'On' : 'Off', { big: true, pressed: S().reminders })}
-      <div class="stack">${rbtn('allow-notify', 'bell', 'Allow notifications', { disabled: perm !== 'default' })}${rbtn('test-notify', 'send', 'Send a test')}</div>`);
+      <div class="stack">${rbtn('allow-notify', 'bell', 'Allow notifications', { disabled: perm !== 'prompt' })}${
+        exactNote ? rbtn('exact-alarm', 'today', 'Exact timing') : ''}${rbtn('test-notify', 'send', 'Send a test')}</div>`);
     const leads = [[0, 'At start'], [5, '5 min before'], [10, '10 min before'], [15, '15 min before'], [30, '30 min before'], [60, '1 hour before']];
     html += group('Defaults', `<div class="stack">
       <label class="rfield" for="defaultLead"><span>New items</span><select id="defaultLead"><option value="">No reminder</option>${leads.map(
         ([v, l]) => `<option value="${v}" ${S().defaultLead === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
       <label class="rfield" for="allDayAt"><span>All-day at</span><input type="time" id="allDayAt" value="${S().allDayReminderAt}"></label></div>`);
     const up = upcomingReminders(state);
-    html += group('Coming up', `<div class="upcoming"><p class="note">${permText}</p>${up.length
+    html += group('Coming up', `<div class="upcoming"><p class="note">${permText}${exactNote}</p>${up.length
       ? `<ul>${up.map((r) => `<li><span class="mono">${r.date === today() ? 'Today' : WEEKDAYS[weekday(r.date)]} ${fmtTime(r.at.getHours() * 60 + r.at.getMinutes())}</span> ${esc(r.item.title)}</li>`).join('')}</ul>`
       : '<p class="note">No reminders in the next 7 days.</p>'}</div>`);
   } else if (ui.tab === 'file') {
@@ -791,23 +826,39 @@ function toast(msg, { actions = [], timeout = 5000 } = {}) {
 
 /* ---------- reminders ---------- */
 
+function reminderText(r) {
+  const when = r.item.allDay || !r.item.start
+    ? 'Today'
+    : `${r.item.kind === 'task' ? 'Due' : 'Starts'} at ${fmtTime(toMinutes(r.item.start))}`;
+  return { title: r.item.title, body: `${when}${r.item.notes ? ` · ${r.item.notes}` : ''}` };
+}
+
+function showOccurrence(id, date) {
+  if (!itemById(id)) return;
+  ui.cursor = date;
+  ui.sel = { kind: 'item', id, date };
+  ui.scrollPending = true;
+  render();
+}
+
+// In a browser, reminders are checked while the app is open. In the phone
+// apps the operating system delivers them instead (see native.js).
 async function checkReminders() {
-  if (!S().reminders) return;
+  if (!S().reminders || isNative) return;
   const due = dueReminders(state);
   if (!due.length) return;
   for (const r of due) state.notified[r.key] = Date.now();
   pruneNotified(state.notified);
   persist();
   for (const r of due) {
-    const when = r.item.allDay || !r.item.start ? 'Today' : `${r.item.kind === 'task' ? 'Due' : 'Starts'} at ${fmtTime(toMinutes(r.item.start))}`;
-    const body = `${when}${r.item.notes ? ` · ${r.item.notes}` : ''}`;
+    const { body } = reminderText(r);
     const shown = document.hidden ? await showSystemNotification(r.item.title, body, r.key) : false;
     if (!shown) {
       toast(`⏰ ${r.item.title} — ${body}`, {
         timeout: 0,
         actions: [
           { label: 'Mark done', fn: () => setStatus(r.item.id, r.date, 'done') },
-          { label: 'Show', fn: () => { ui.cursor = r.date; ui.sel = { kind: 'item', id: r.item.id, date: r.date }; ui.scrollPending = true; render(); } },
+          { label: 'Show', fn: () => showOccurrence(r.item.id, r.date) },
         ],
       });
       if (!document.hidden) showSystemNotification(r.item.title, body, r.key);
@@ -852,13 +903,22 @@ document.addEventListener('click', async (e) => {
         S().reminders = !S().reminders;
         persist();
         render();
+        if (S().reminders && isNative && ui.perm === 'prompt') await askPermission();
         return toast(S().reminders ? 'Reminders on' : 'Reminders off');
       case 'allow-notify': {
-        const p = await requestPermission();
+        const p = await askPermission();
         render();
-        return toast(p === 'granted' ? 'Notifications allowed' : 'Notifications not allowed — reminders will appear inside the app');
+        if (p === 'granted') return toast('Notifications allowed');
+        return toast(isNative ? 'Notifications not allowed — you can turn them on later in Settings' : 'Notifications not allowed — reminders will appear inside the app');
       }
+      case 'exact-alarm':
+        await openExactAlarmSetting();
+        return refreshPermission();
       case 'test-notify': {
+        if (isNative) {
+          const sent = await sendTestNotification();
+          return toast(sent ? 'A test reminder will arrive in a few seconds' : 'Allow notifications first, then try again');
+        }
         const shown = await showSystemNotification('Power reminder', 'This is what a reminder looks like.', 'test');
         return toast(shown ? 'Test notification sent' : '⏰ Test reminder — this is how reminders appear inside the app');
       }
@@ -1029,7 +1089,15 @@ function exportJson() {
     items: state.items, status: state.status, settings: state.settings }, null, 2);
 }
 
-function exportData() {
+async function exportData() {
+  if (isNative) {
+    try {
+      if (await shareExport(exportJson(), `power-routine-${today()}.json`)) return;
+    } catch {
+      /* share sheet dismissed or unavailable: fall back to the clipboard */
+    }
+    return copyData();
+  }
   try {
     const url = URL.createObjectURL(new Blob([exportJson()], { type: 'application/json' }));
     const a = Object.assign(document.createElement('a'), { href: url, download: `power-routine-${today()}.json` });
@@ -1071,12 +1139,37 @@ function importFile(file) {
 
 /* ---------- boot ---------- */
 
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+if (!isNative && 'serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
+
+await initNative({
+  describeReminder: reminderText,
+  onReminderAction: ({ id, date, action }) => {
+    if (action === 'done' && itemById(id)) setStatus(id, date, 'done');
+    showOccurrence(id, date);
+  },
+  onBack: () => {
+    const open = document.querySelector('dialog[open]');
+    if (open) {
+      open.close();
+      return true;
+    }
+    return false;
+  },
+  onResume: () => {
+    render();
+    refreshPermission();
+    syncReminders(state);
+  },
+});
 
 render();
 persist();
 setInterval(() => { updateNowLine(); checkReminders(); }, 30000);
 checkReminders();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkReminders(); render(); } });
+refreshPermission().then((p) => {
+  // First launch in the phone app: ask once, since reminders are a core feature.
+  if (isNative && p === 'prompt' && S().reminders) askPermission();
+});

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon for reminders: a grid with a checked cell (white on transparent, as Android requires). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M3,4h18v16H3V4zM5,6v3h14V6H5zM5,11v3h3.5v-3H5zM15.5,11v3H19v-3h-3.5zM5,16v2h3.5v-2H5zM10.5,16v2h3v-2h-3zM15.5,16v2H19v-2h-3.5zM10.5,11v3h3v-3h-3z" />
+</vector>

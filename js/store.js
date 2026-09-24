@@ -24,7 +24,7 @@ export function defaultSettings() {
     weekends: true,
     clock24: false,
     hideDone: false,
-    reminders: false,
+    reminders: true,
     defaultLead: 10,
     allDayReminderAt: '08:00',
   };

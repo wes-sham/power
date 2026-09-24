@@ -1,0 +1,11 @@
+{
+  "appId": "com.wessham.power",
+  "appName": "Power",
+  "webDir": "www",
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_power",
+      "iconColor": "#1c6a50"
+    }
+  }
+}

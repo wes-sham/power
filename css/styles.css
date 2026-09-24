@@ -105,6 +105,7 @@
 html, body { height: 100%; }
 body {
   margin: 0;
+  touch-action: manipulation;
   background: var(--bg);
   color: var(--ink);
   font: 14px/1.4 var(--font);
@@ -635,6 +636,17 @@ dialog::backdrop { background: rgba(8, 20, 14, 0.42); }
 .toast .x svg { width: 14px; height: 14px; }
 @keyframes toast-in { from { transform: translateY(6px); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+
+/* ---------- phone apps (Capacitor) ---------- */
+
+/* The web view runs edge to edge; keep content clear of the notch and home bar. */
+.native .titlebar { padding-top: calc(8px + env(safe-area-inset-top, 0px)); }
+.native .app {
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+}
+.native .titlebar { margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px))); }
+.native .toasts { bottom: calc(52px + env(safe-area-inset-bottom, 0px)); }
 
 /* ---------- narrow screens ---------- */
 

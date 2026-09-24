@@ -1,8 +1,9 @@
 // Offline cache for the app shell, and click handling for reminder notifications.
 const CACHE = 'power-v1';
 const SHELL = [
+  'icons/icon-192.webp', 'icons/icon-512.webp',
   './', 'index.html', 'css/styles.css', 'js/app.js', 'js/recurrence.js', 'js/store.js',
-  'js/reminders.js', 'manifest.webmanifest', 'icons/icon.svg',
+  'js/reminders.js', 'js/native.js', 'manifest.webmanifest', 'icons/icon.svg',
 ];
 
 self.addEventListener('install', (e) => {

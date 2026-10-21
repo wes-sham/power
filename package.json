@@ -11,7 +11,8 @@
     "sync": "npm run build && cap sync",
     "android": "npm run sync && cap open android",
     "ios": "npm run sync && cap open ios",
-    "assets": "npx @capacitor/assets generate --iconBackgroundColor '#1c6a50' --iconBackgroundColorDark '#143a2c' --splashBackgroundColor '#1c6a50' --splashBackgroundColorDark '#143a2c'"
+    "assets": "npx @capacitor/assets generate --iconBackgroundColor '#1c6a50' --iconBackgroundColorDark '#143a2c' --splashBackgroundColor '#1c6a50' --splashBackgroundColorDark '#143a2c'",
+    "bundle:android": "node scripts/bundle-android.js"
   },
   "engines": {
     "node": ">=22"

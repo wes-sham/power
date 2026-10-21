@@ -199,7 +199,7 @@ svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width:
 .rcheck input { accent-color: var(--accent); margin: 0; }
 .note { font-size: 12px; color: var(--ink-2); margin: 0; }
 .note.about { max-width: 34ch; white-space: normal; }
-.upcoming { max-width: 380px; display: grid; gap: 4px; font-size: 12.5px; }
+.upcoming { max-width: min(380px, 78vw); display: grid; gap: 4px; font-size: 12.5px; }
 .upcoming ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 1px; }
 .upcoming .mono { color: var(--accent); font-size: 12px; margin-right: 6px; }
 
@@ -422,8 +422,8 @@ button.col-day:hover { background: var(--hover); color: var(--ink); }
   place-items: center;
 }
 .st.is-task { border-radius: 3px; }
-.st-doing { border-color: var(--doing); background: linear-gradient(90deg, var(--doing) 50%, var(--sheet) 50%); }
-.st-done { border-color: var(--done); background: var(--done); }
+.st.st-doing { border-color: var(--doing); background: linear-gradient(90deg, var(--doing) 50%, var(--sheet) 50%); }
+.st.st-done { border-color: var(--done); background: var(--done); }
 .st svg { width: 10px; height: 10px; stroke: var(--sheet); stroke-width: 2; }
 button.st:hover { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
 .chip .st { width: 12px; height: 12px; margin-top: 0; }

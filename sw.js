@@ -1,8 +1,11 @@
 // Offline cache for the app shell, and click handling for reminder notifications.
-const CACHE = 'power-v1';
+const CACHE = 'power-v2';
 const SHELL = [
   'icons/icon-192.webp', 'icons/icon-512.webp',
-  './', 'index.html', 'css/styles.css', 'js/app.js', 'js/recurrence.js', 'js/store.js',
+  './', 'index.html', 'css/styles.css', 'css/fonts.css',
+  'fonts/instrument-sans-latin-400-normal.woff2', 'fonts/instrument-sans-latin-500-normal.woff2',
+  'fonts/instrument-sans-latin-600-normal.woff2', 'fonts/instrument-sans-latin-700-normal.woff2',
+  'fonts/ibm-plex-mono-latin-400-normal.woff2', 'fonts/ibm-plex-mono-latin-500-normal.woff2', 'js/app.js', 'js/recurrence.js', 'js/store.js',
   'js/reminders.js', 'js/native.js', 'manifest.webmanifest', 'icons/icon.svg',
 ];
 

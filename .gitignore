@@ -1,3 +1,8 @@
 node_modules/
 .DS_Store
 www/
+
+# Signing keys and their passwords
+*.jks
+*.keystore
+android/keystore.properties

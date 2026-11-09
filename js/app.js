@@ -1127,7 +1127,7 @@ function importFile(file) {
     try {
       data = normalize(JSON.parse(reader.result));
     } catch {
-      return toast('That file isn’t a Ultra Planner export — choose a .json file saved from File › Export');
+      return toast('That file isn’t an Ultra Planner export — choose a .json file saved from File › Export');
     }
     const ok = await ask({ title: `Import ${data.items.length} items?`, body: 'This replaces the routine that’s here now.',
       buttons: [{ label: 'Cancel', value: null }, { label: 'Replace and import', value: true, tone: 'danger' }] });

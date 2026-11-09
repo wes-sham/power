@@ -130,7 +130,7 @@ export async function sendTestNotification() {
   if ((await N.checkPermissions()).display !== 'granted') return false;
   await N.schedule({
     notifications: [{
-      id: 1, title: 'Power reminder', body: 'This is what a reminder looks like.',
+      id: 1, title: 'Ultra Planner reminder', body: 'This is what a reminder looks like.',
       schedule: { at: new Date(Date.now() + 3000), allowWhileIdle: true }, smallIcon: 'ic_stat_power',
     }],
   });
@@ -143,6 +143,6 @@ export async function shareExport(json, filename) {
   const Share = plugin('Share');
   if (!FS || !Share) return false;
   const { uri } = await FS.writeFile({ path: filename, data: json, directory: 'CACHE', encoding: 'utf8' });
-  await Share.share({ title: 'Power routine backup', files: [uri] });
+  await Share.share({ title: 'Ultra Planner routine backup', files: [uri] });
   return true;
 }

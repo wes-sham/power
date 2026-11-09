@@ -1,5 +1,5 @@
 // Offline cache for the app shell, and click handling for reminder notifications.
-const CACHE = 'power-v2';
+const CACHE = 'power-v3';
 const SHELL = [
   'icons/icon-192.webp', 'icons/icon-512.webp',
   './', 'index.html', 'css/styles.css', 'css/fonts.css',

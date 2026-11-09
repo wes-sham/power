@@ -1,6 +1,6 @@
 {
   "appId": "com.wessham.power",
-  "appName": "Power",
+  "appName": "Ultra Planner",
   "webDir": "www",
   "plugins": {
     "LocalNotifications": {

@@ -242,9 +242,9 @@ function renderRibbon() {
     const perm = ui.perm;
     const permText = isNative
       ? {
-          granted: 'Reminders are scheduled with your phone, so they arrive even when Power is closed.',
-          denied: `Notifications are turned off for Power. Turn them on in your phone’s Settings › ${platform === 'ios' ? 'Notifications › Power' : 'Apps › Power › Notifications'}.`,
-          prompt: 'Allow notifications so reminders arrive even when Power is closed.',
+          granted: 'Reminders are scheduled with your phone, so they arrive even when Ultra Planner is closed.',
+          denied: `Notifications are turned off for Ultra Planner. Turn them on in your phone’s Settings › ${platform === 'ios' ? 'Notifications › Ultra Planner' : 'Apps › Ultra Planner › Notifications'}.`,
+          prompt: 'Allow notifications so reminders arrive even when Ultra Planner is closed.',
         }[perm]
       : {
           granted: 'System notifications are on.',
@@ -270,7 +270,7 @@ function renderRibbon() {
     html += group('Your data', `${rbtn('export', 'download', 'Export', { big: true })}<div class="stack">${rbtn('import', 'upload', 'Import…')}${rbtn('copy-data', 'copy', 'Copy as text')}</div>
       <input type="file" id="importFile" accept="application/json,.json" hidden>`);
     html += group('Start over', `<div class="stack">${rbtn('load-sample', 'sample', 'Load sample routine')}${rbtn('clear-all', 'clear', 'Clear everything')}</div>`);
-    html += group('About', `<p class="note about"><strong>Power</strong> — one-time purchase, no subscription, no account. Your routine is stored only on this device; export it to back it up or move it.</p>`);
+    html += group('About', `<p class="note about"><strong>Ultra Planner</strong> — one-time purchase, no subscription, no account. Your routine is stored only on this device; export it to back it up or move it.</p>`);
   }
   $('#ribbon').innerHTML = html;
   document.querySelectorAll('.rtab').forEach((t) => {
@@ -919,7 +919,7 @@ document.addEventListener('click', async (e) => {
           const sent = await sendTestNotification();
           return toast(sent ? 'A test reminder will arrive in a few seconds' : 'Allow notifications first, then try again');
         }
-        const shown = await showSystemNotification('Power reminder', 'This is what a reminder looks like.', 'test');
+        const shown = await showSystemNotification('Ultra Planner reminder', 'This is what a reminder looks like.', 'test');
         return toast(shown ? 'Test notification sent' : '⏰ Test reminder — this is how reminders appear inside the app');
       }
       case 'export': return exportData();
@@ -1092,7 +1092,7 @@ function exportJson() {
 async function exportData() {
   if (isNative) {
     try {
-      if (await shareExport(exportJson(), `power-routine-${today()}.json`)) return;
+      if (await shareExport(exportJson(), `ultra-planner-routine-${today()}.json`)) return;
     } catch {
       /* share sheet dismissed or unavailable: fall back to the clipboard */
     }
@@ -1100,7 +1100,7 @@ async function exportData() {
   }
   try {
     const url = URL.createObjectURL(new Blob([exportJson()], { type: 'application/json' }));
-    const a = Object.assign(document.createElement('a'), { href: url, download: `power-routine-${today()}.json` });
+    const a = Object.assign(document.createElement('a'), { href: url, download: `ultra-planner-routine-${today()}.json` });
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -1127,7 +1127,7 @@ function importFile(file) {
     try {
       data = normalize(JSON.parse(reader.result));
     } catch {
-      return toast('That file isn’t a Power export — choose a .json file saved from File › Export');
+      return toast('That file isn’t a Ultra Planner export — choose a .json file saved from File › Export');
     }
     const ok = await ask({ title: `Import ${data.items.length} items?`, body: 'This replaces the routine that’s here now.',
       buttons: [{ label: 'Cancel', value: null }, { label: 'Replace and import', value: true, tone: 'danger' }] });

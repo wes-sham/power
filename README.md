@@ -1,6 +1,6 @@
-# Power — weekly routine planner
+# Ultra Planner — weekly routine planner
 
-Most planners make you build your schedule one day at a time. **Power** lets you set
+Most planners make you build your schedule one day at a time. **Ultra Planner** lets you set
 your routine once — classes, shifts, practices, chores — and it repeats automatically,
 week after week.
 
@@ -10,11 +10,11 @@ between **Day**, **Week**, and **Month**.
 
 ## What it does
 
-| Requirement | How Power handles it |
+| Requirement | How Ultra Planner handles it |
 | --- | --- |
 | List events and tasks, mark them off | Events (timed blocks) and tasks (all-day or due at a time). Each one has a status glyph you click to cycle **Not started → Working → Done**. Circle = event, square = task. |
 | Repeat on chosen weekdays | Pick any days (with presets like *Mon · Wed · Fri* and *Tue · Thu*), then choose **Every week**, **Every few weeks** (every *N* weeks), or **One week only**. End it **never**, **after a number of weeks**, or **on a date** (e.g. the last day of the semester). The editor previews the next dates and how many there'll be in total. |
-| Reminders | Per-item reminders (at start, 5/10/15/30/60 minutes, or 1 day before). In the phone apps they're scheduled with the phone, so they arrive even when Power is closed, and each has a **Mark done** button. On the web they show as browser notifications or in-app alerts while the app is open. |
+| Reminders | Per-item reminders (at start, 5/10/15/30/60 minutes, or 1 day before). In the phone apps they're scheduled with the phone, so they arrive even when Ultra Planner is closed, and each has a **Mark done** button. On the web they show as browser notifications or in-app alerts while the app is open. |
 | Intuitive to add and update | Double-click any cell, or select a cell and just start typing, then press Enter (like entering a value in a spreadsheet). Keyboard: arrows move, Enter opens, Space changes status, Delete removes (this day only, or every week), Ctrl/⌘+Z undoes. |
 | One-time payment | No accounts, no servers, no subscription. Everything is stored on the device. It ships as iPhone and Android apps (via Capacitor) that can be listed as paid, one-time-purchase apps. See [Selling it](#selling-it). |
 | Excel-inspired, scales by view | Ribbon (File / Home / View / Reminders), a name box that shows the cell reference (`C14` = the 3rd day column, 2 PM row), and a status bar with counts and % complete. Week view shows full blocks; Month view shrinks items to one-line chips with “+N more”; Day view adds notes and the repeat rule. |
@@ -34,7 +34,7 @@ npm test         # runs the recurrence, reminder, and phone-scheduling tests
 
 ## Building the phone apps
 
-Power uses [Capacitor](https://capacitorjs.com) to wrap the same web app as a real
+Ultra Planner uses [Capacitor](https://capacitorjs.com) to wrap the same web app as a real
 iPhone and Android app. The native projects are in `ios/` and `android/`.
 
 ### Android (Windows, Mac, or Linux)
@@ -70,7 +70,7 @@ To redraw the app icon and splash screens, edit the PNGs in `assets/` and run
 
 ### What's different in the phone apps
 
-- **Reminders arrive even when the app is closed.** Power schedules the next two weeks of
+- **Reminders arrive even when the app is closed.** Ultra Planner schedules the next two weeks of
   reminders with the phone (up to 60, the most iOS allows) and re-plans them every time
   you change something or open the app. Tapping **Mark done** on a notification checks
   the item off without opening the app.
@@ -129,7 +129,7 @@ drift when daylight saving time changes.
 
 ## Limits
 
-- **Web reminders need the app open.** In a browser, reminders only fire while Power is
+- **Web reminders need the app open.** In a browser, reminders only fire while Ultra Planner is
   open (a background tab is fine). The phone apps don't have this limit.
 - **Phone reminders look two weeks ahead.** If you don't open the app for more than two
   weeks, reminders stop until you open it again.
@@ -164,7 +164,7 @@ For each update, raise `versionCode` (1 → 2 → 3…) and `versionName` in
 
 ## Selling it
 
-Power is built to be sold once, with no subscription:
+Ultra Planner is built to be sold once, with no subscription:
 
 - **App Store (iPhone):** join the [Apple Developer Program](https://developer.apple.com/programs/)
   ($99/year for the developer account, not for your customers). In App Store Connect,

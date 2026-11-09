@@ -15,10 +15,10 @@ Files in this folder:
 
 **App name** (30 characters max)
 ```
-Power: Weekly Routine Planner
+Ultra Planner: Weekly Routine
 ```
-> Search Google Play before you publish. A popular student app called "Power Planner"
-> already exists, so avoid that exact name.
+> Search Google Play before you publish. Similar names already exist ("Ultimate Planner",
+> "Ulti-Planner"), so keep the full name "Ultra Planner" and don't shorten it to "Ultra".
 
 **Short description** (80 characters max)
 ```
@@ -27,7 +27,7 @@ Set your weekly routine once and it repeats, week after week. No subscription.
 
 **Full description** (4000 characters max)
 ```
-Most planners make you fill in your schedule one day at a time. Power lets you set your routine once — classes, work shifts, practices, chores — and it repeats automatically, week after week.
+Most planners make you fill in your schedule one day at a time. Ultra Planner lets you set your routine once — classes, work shifts, practices, chores — and it repeats automatically, week after week.
 
 SET IT ONCE
 • Pick the days: Mon/Wed/Fri, Tue/Thu, weekdays, or any mix
@@ -42,7 +42,7 @@ TRACK YOUR PROGRESS
 
 REMINDERS THAT ACTUALLY ARRIVE
 • Remind yourself at start time, 5 to 60 minutes before, or a day early
-• Reminders come from your phone, so they arrive even when Power is closed
+• Reminders come from your phone, so they arrive even when Ultra Planner is closed
 • Tap "Mark done" right on the notification
 
 A LAYOUT YOU ALREADY KNOW
@@ -93,7 +93,7 @@ of the stricter Families program, and the app isn't designed for young children.
 
 **Data safety:**
 - Does your app collect or share any of the required user data types? **No**
-- That's the whole form. Power stores data only on the device and sends nothing over the
+- That's the whole form. Ultra Planner stores data only on the device and sends nothing over the
   network, which Google doesn't count as "collected".
 
 **Government app / Financial features / Health:** No / None / No.
